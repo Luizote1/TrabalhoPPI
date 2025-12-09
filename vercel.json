@@ -8,6 +8,10 @@
   ],
   "routes": [
     {
+      "src": "/logoLOL.png",
+      "dest": "/logoLOL.png"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.js"
     }
