@@ -6,7 +6,7 @@ import fs from "fs";
 import path from "path";
 
 const app = express();
-app.use("/imagens", express.static("imagens"));
+app.use(express.static("imagens"));
 const port = 3500;
 
 app.use(bodyParser.urlencoded({ extended: true }));
