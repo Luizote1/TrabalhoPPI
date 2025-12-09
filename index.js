@@ -10,8 +10,6 @@
 
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
-  app.use("/imagens", express.static("public/imagens"));
-  app.use(express.static("public"));
 
   app.use(
     session({
