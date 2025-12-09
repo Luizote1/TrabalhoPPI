@@ -1,58 +1,77 @@
-  import express from "express";
-  import bodyParser from "body-parser";
-  import session from "express-session";
-  import cookieParser from "cookie-parser";
-  import fs from "fs";
-  import path from "path";
+import express from "express";
+import bodyParser from "body-parser";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import fs from "fs";
+import path from "path";
 
-  const app = express();
-  const port = 3500;
+const app = express();
+const port = 3500;
 
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-  app.use(
-    session({
-      secret: "segredo-lol",
-      resave: false,
-      saveUninitialized: false,
-      cookie: { maxAge: 30 * 60 * 1000 }, // 30 minutos
-    })
-  );
+app.use(
+  session({
+    secret: "segredo-lol",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 30 * 60 * 1000 }, // 30 minutos
+  })
+);
 
-  const FILE = process.env.NODE_ENV === "production" ? path.join("/tmp", "data.json") : "data.json";
+const FILE =
+  process.env.NODE_ENV === "production"
+    ? path.join("/tmp", "data.json")
+    : "data.json";
 
-  let equipes = [];
-  let jogadores = [];
+let equipes = [];
+let jogadores = [];
 
-  if (fs.existsSync(FILE)) {
-    try {
-      const data = JSON.parse(fs.readFileSync(FILE, "utf8"));
-      equipes = data.equipes || [];
-      jogadores = data.jogadores || [];
-    } catch {
-      equipes = [];
-      jogadores = [];
-    }
+if (fs.existsSync(FILE)) {
+  try {
+    const data = JSON.parse(fs.readFileSync(FILE, "utf8"));
+    equipes = data.equipes || [];
+    jogadores = data.jogadores || [];
+  } catch {
+    equipes = [];
+    jogadores = [];
   }
+}
 
-  function salvar() {
-    fs.writeFileSync(FILE, JSON.stringify({ equipes, jogadores }, null, 2));
+function salvar() {
+  fs.writeFileSync(FILE, JSON.stringify({ equipes, jogadores }, null, 2));
+}
+
+/* ---------- GERAR DATA BRASILEIRA DD/MM/YYYY HH:MM:SS ---------- */
+function dataBrasileira() {
+  const agora = new Date();
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).format(agora);
+}
+
+/* ---------- MIDDLEWARE PARA PROTEGER ROTAS ---------- */
+function verificarLogin(req, res, next) {
+  if (!req.session.user) {
+    return res.redirect("/login");
   }
+  next();
+}
 
-  /* ---------- MIDDLEWARE PARA PROTEGER ROTAS ---------- */
-  function verificarLogin(req, res, next) {
-    if (!req.session.user) {
-      return res.redirect("/login");
-    }
-    next();
-  }
+/* -------------------- LAYOUT ---------------------- */
+function layout(req, titulo, conteudo) {
+  const logado = req.session.user ? true : false;
 
-  /* -------------------- LAYOUT ---------------------- */
-  function layout(req, titulo, conteudo) {
-    const logado = req.session.user ? true : false;
-
-    return `
+  return `
     <!DOCTYPE html>
     <html>
     <head>
@@ -87,7 +106,10 @@
     <body>
 
       <header>
-        <h1 class="batata text-center fw-bold" style="text-shadow: 2px 2px 4px #000;margin-top: 30px; letter-spacing: 1px;">Inscrição para Campeonato Amador de LOL</h1>
+        <h1 class="text-center fw-bold" 
+            style="text-shadow: 2px 2px 4px #000; margin-top: 30px; letter-spacing: 1px;">
+            Inscrição para Campeonato Amador de LOL
+        </h1>
       </header>
 
       ${
@@ -115,20 +137,20 @@
 
     </body>
     </html>`;
-  }
+}
 
-  /* ---------------- LOGIN É A PÁGINA INICIAL ---------------- */
-  app.get("/", (req, res) => {
-    res.redirect("/login");
-  });
+/* ---------------- LOGIN É A PÁGINA INICIAL ---------------- */
+app.get("/", (req, res) => {
+  res.redirect("/login");
+});
 
-  /* ---------------- LOGIN ---------------- */
-  app.get("/login", (req, res) => {
-    res.send(
-      layout(
-        req,
-        "Login",
-        `
+/* ---------------- LOGIN ---------------- */
+app.get("/login", (req, res) => {
+  res.send(
+    layout(
+      req,
+      "Login",
+      `
         <h2 class="text-center">Login</h2>
         <form method="POST" class="mt-3 col-md-6 offset-md-3">
 
@@ -145,75 +167,76 @@
           <button class="btn w-100">Entrar</button>
         </form>
         `
-      )
-    );
-  });
+    )
+  );
+});
 
-  app.post("/login", (req, res) => {
-    const { user, pass } = req.body;
+app.post("/login", (req, res) => {
+  const { user, pass } = req.body;
 
-    if (user === "adm" && pass === "123456") {
-      req.session.user = user;
-      return res.redirect("/home");
-    }
+  if (user === "adm" && pass === "123456") {
+    req.session.user = user;
+    return res.redirect("/home");
+  }
 
-    res.send(
-      layout(
-        req,
-        "Erro",
-        `<div class="alert alert-danger">Usuário ou senha inválidos.</div>
+  res.send(
+    layout(
+      req,
+      "Erro",
+      `<div class="alert alert-danger">Usuário ou senha inválidos.</div>
         <a class="btn" href="/login">Tentar novamente</a>`
-      )
-    );
+    )
+  );
+});
+
+/* ---------------- LOGOUT ---------------- */
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.clearCookie("connect.sid");
+    res.redirect("/login");
   });
+});
 
-  /* ---------------- LOGOUT ---------------- */
-  app.get("/logout", (req, res) => {
-    req.session.destroy(() => {
-      res.clearCookie("connect.sid");
-      res.redirect("/login");
-    });
-  });
+/* ---------------- HOME ---------------- */
+app.get("/home", verificarLogin, (req, res) => {
+  const last = req.cookies.lastAccess
+    ? `<p>Último acesso: ${req.cookies.lastAccess}</p>`
+    : "<p>Primeiro acesso!</p>";
 
-  /* ---------------- HOME (APÓS LOGIN) ---------------- */
-  app.get("/home", verificarLogin, (req, res) => {
-    const last = req.cookies.lastAccess
-      ? `<p>Último acesso: ${req.cookies.lastAccess}</p>`
-      : "<p>Primeiro acesso!</p>";
+  // Salva a data e hora no formato brasileiro no cookie
+  res.cookie("lastAccess", dataBrasileira());
 
-    res.cookie("lastAccess", new Date().toLocaleString());
-
-    res.send(
-      layout(
-        req,
-        "Home",
-        `
+  res.send(
+    layout(
+      req,
+      "Home",
+      `
         <h1>Campeonato Amador de League of Legends</h1>
         ${last}
         `
-      )
-    );
-  });
+    )
+  );
+});
 
-  /* ---------------- CADASTRO DE EQUIPE (PROTEGIDO) ---------------- */
-  app.get("/equipe", verificarLogin, (req, res) => {
-    const tabela = equipes
-      .map(
-        (e, i) => `
+/* ---------------- CADASTRO DE EQUIPE ---------------- */
+app.get("/equipe", verificarLogin, (req, res) => {
+  const tabela = equipes
+    .map(
+      (e, i) => `
         <tr>
           <td>${i + 1}</td>
           <td>${e.nome}</td>
           <td>${e.capitao}</td>
           <td>${e.contato}</td>
         </tr>`
-      )
-      .join("");
+    )
+    .join("");
 
-    res.send(
-      layout(
-        req,
-        "Equipes",
-        `
+  res.send(
+    layout(
+      req,
+      "Equipes",
+      `
         <h2>Cadastrar Equipe</h2>
 
         <form method="POST" action="/equipe/cadastrar" class="row g-3">
@@ -247,59 +270,59 @@
           <tbody>${tabela}</tbody>
         </table>
         `
-      )
-    );
-  });
+    )
+  );
+});
 
-  app.post("/equipe/cadastrar", verificarLogin, (req, res) => {
-    const { nome, capitao, contato } = req.body;
+app.post("/equipe/cadastrar", verificarLogin, (req, res) => {
+  const { nome, capitao, contato } = req.body;
 
-    if (!nome || !capitao || !contato) {
-      return res.send(
-        layout(
-          req,
-          "Erro",
-          `<div class="alert alert-danger">Preencha todos os campos.</div>
+  if (!nome || !capitao || !contato) {
+    return res.send(
+      layout(
+        req,
+        "Erro",
+        `<div class="alert alert-danger">Preencha todos os campos.</div>
           <a href="/equipe" class="btn">Voltar</a>`
-        )
-      );
-    }
-
-    equipes.push({ nome, capitao, contato });
-    salvar();
-
-    res.send(
-      layout(
-        req,
-        "Sucesso",
-        `<div class="alert alert-success">Equipe cadastrada com sucesso!</div>
-        <a href="/equipe" class="btn">Voltar</a>`
       )
     );
-  });
+  }
 
-  /* ---------------- CADASTRO DE JOGADOR (PROTEGIDO) ---------------- */
-  app.get("/jogador", verificarLogin, (req, res) => {
-    const options = equipes
-      .map((e) => `<option value="${e.nome}">${e.nome}</option>`)
-      .join("");
+  equipes.push({ nome, capitao, contato });
+  salvar();
 
-    const tabela = equipes
-      .map((e) => {
-        const lista = jogadores
-          .filter((j) => j.equipe === e.nome)
-          .map((j) => `<li>${j.nome} (${j.funcao})</li>`)
-          .join("");
+  res.send(
+    layout(
+      req,
+      "Sucesso",
+      `<div class="alert alert-success">Equipe cadastrada com sucesso!</div>
+        <a href="/equipe" class="btn">Voltar</a>`
+    )
+  );
+});
 
-        return `<h4>${e.nome}</h4><ul>${lista || "<i>Sem jogadores</i>"}</ul>`;
-      })
-      .join("<hr>");
+/* ---------------- CADASTRO DE JOGADOR ---------------- */
+app.get("/jogador", verificarLogin, (req, res) => {
+  const options = equipes
+    .map((e) => `<option value="${e.nome}">${e.nome}</option>`)
+    .join("");
 
-    res.send(
-      layout(
-        req,
-        "Jogadores",
-        `
+  const tabela = equipes
+    .map((e) => {
+      const lista = jogadores
+        .filter((j) => j.equipe === e.nome)
+        .map((j) => `<li>${j.nome} (${j.funcao})</li>`)
+        .join("");
+
+      return `<h4>${e.nome}</h4><ul>${lista || "<i>Sem jogadores</i>"}</ul>`;
+    })
+    .join("<hr>");
+
+  res.send(
+    layout(
+      req,
+      "Jogadores",
+      `
         <h2>Cadastrar Jogador</h2>
 
         <form method="POST" action="/jogador/cadastrar" class="row g-3">
@@ -353,50 +376,50 @@
         <h3 class="mt-4">Jogadores cadastrados</h3>
         ${tabela}
         `
-      )
-    );
-  });
+    )
+  );
+});
 
-  app.post("/jogador/cadastrar", verificarLogin, (req, res) => {
-    const { nome, nick, funcao, elo, genero, equipe } = req.body;
+app.post("/jogador/cadastrar", verificarLogin, (req, res) => {
+  const { nome, nick, funcao, elo, genero, equipe } = req.body;
 
-    if (!nome || !nick || !funcao || !elo || !genero || !equipe) {
-      return res.send(
-        layout(
-          req,
-          "Erro",
-          `<div class="alert alert-danger">Preencha todos os campos.</div>
-          <a href="/jogador" class="btn">Voltar</a>`
-        )
-      );
-    }
-
-    const qtdJog = jogadores.filter((j) => j.equipe === equipe).length;
-    if (qtdJog >= 5) {
-      return res.send(
-        layout(
-          req,
-          "Erro",
-          `<div class="alert alert-danger">A equipe já possui 5 jogadores.</div>
-          <a href="/jogador" class="btn">Voltar</a>`
-        )
-      );
-    }
-
-    jogadores.push({ nome, nick, funcao, elo, genero, equipe });
-    salvar();
-
-    res.send(
+  if (!nome || !nick || !funcao || !elo || !genero || !equipe) {
+    return res.send(
       layout(
         req,
-        "Sucesso",
-        `<div class="alert alert-success">Jogador cadastrado!</div>
-        <a href="/jogador" class="btn">Voltar</a>`
+        "Erro",
+        `<div class="alert alert-danger">Preencha todos os campos.</div>
+          <a href="/jogador" class="btn">Voltar</a>`
       )
     );
-  });
+  }
 
-  /* ------------------- SERVIDOR -------------------- */
-  app.listen(port, () => {
-    console.log(`Servidor rodando em http://localhost:${port}`);
-  });
+  const qtdJog = jogadores.filter((j) => j.equipe === equipe).length;
+  if (qtdJog >= 5) {
+    return res.send(
+      layout(
+        req,
+        "Erro",
+        `<div class="alert alert-danger">A equipe já possui 5 jogadores.</div>
+          <a href="/jogador" class="btn">Voltar</a>`
+      )
+    );
+  }
+
+  jogadores.push({ nome, nick, funcao, elo, genero, equipe });
+  salvar();
+
+  res.send(
+    layout(
+      req,
+      "Sucesso",
+      `<div class="alert alert-success">Jogador cadastrado!</div>
+        <a href="/jogador" class="btn">Voltar</a>`
+    )
+  );
+});
+
+/* ------------------- SERVIDOR -------------------- */
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`);
+});
