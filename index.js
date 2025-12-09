@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import fs from "fs";
+import path from "path";
 
 const app = express();
 app.use("/imagens", express.static("imagens"));
@@ -21,7 +22,7 @@ app.use(
   })
 );
 
-const FILE = "data.json";
+const FILE = process.env.NODE_ENV === "production" ? path.join("/tmp", "data.json") : "data.json";
 
 let equipes = [];
 let jogadores = [];
