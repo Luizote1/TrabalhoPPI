@@ -7,39 +7,10 @@
     }
   ],
   "routes": [
-    // 1. Regra para servir IMAGENS diretamente
     {
       "src": "/imagens/(.*)",
       "dest": "/imagens/$1"
     },
-    // 2. Regra para servir arquivos da pasta PUBLIC diretamente (Opcional, mas seguro)
-    // O Express atende arquivos da pasta 'public' na rota raiz (/).
-    // Se você tem arquivos importantes aqui (como um CSS que não seja o do link CDN),
-    // esta regra garante que eles sejam servidos antes do Express.
-    {
-      "src": "/(.*\\.(css|js|ico|jpg|png|svg))$",
-      "dest": "/public/$1"
-    },
-    // 3. Regra para todas as outras rotas (EXPRESS APP)
-    {
-      "src": "/(.*)",
-      "dest": "index.js"
-    }
-  ]
-}{
-  "version": 2,
-  "builds": [
-    {
-      "src": "index.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/imagens/(.*)",
-      "dest": "/imagens/$1"
-    },
-
     {
       "src": "/(.*\\.(css|js|ico|jpg|png|svg))$",
       "dest": "/public/$1"
