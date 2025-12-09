@@ -1,0 +1,36 @@
+{
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.2.1",
+    "express-session": "^1.18.2",
+    "main": "index.js",
+    "type": "module"
+  },
+  "name": "trabalhoppi",
+  "version": "1.0.0",
+  "description": "Trabalho Final com cokkies tipo post",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+     "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Luizote1/TrabalhoPPI.git"
+  },
+  "keywords": [
+    "node",
+    "javascript",
+    "express",
+    "htpp",
+    "post",
+    "cokkies"
+  ],
+  "author": "Luiz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Luizote1/TrabalhoPPI/issues"
+  },
+  "homepage": "https://github.com/Luizote1/TrabalhoPPI#readme"
+}

@@ -1,0 +1,24 @@
+{
+  "equipes": [
+    {
+      "nome": "Luiz Gustavo Sá da Silva",
+      "capitao": "lUIZ",
+      "contato": "4213412421"
+    },
+    {
+      "nome": "Claudio o ceyfador",
+      "capitao": "Luquinha",
+      "contato": "18381983983"
+    }
+  ],
+  "jogadores": [
+    {
+      "nome": "Jose",
+      "nick": "jsz",
+      "funcao": "mid",
+      "elo": "Diamante",
+      "genero": "Masculino",
+      "equipe": "Claudio o ceyfador"
+    }
+  ]
+}
