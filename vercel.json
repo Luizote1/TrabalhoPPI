@@ -2,14 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "index.js",
+      "src": "TrabalhoPPI/index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
+      "src": "/logoLOL.png",
+      "dest": "TrabalhoPPI/public/logoLOL.png"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/index.js"
+      "dest": "TrabalhoPPI/index.js"
     }
   ]
 }
