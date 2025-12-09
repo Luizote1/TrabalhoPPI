@@ -81,17 +81,13 @@
           background-color: #c9a86a !important;
           color: black !important;
         }
-        header img {
-          display: block;
-          margin: 20px auto;
-        }
       </style>
     </head>
 
     <body>
 
       <header>
-        <img src="../imagens/logoLOL.png" height="140">
+        <h1 class="batata text-center fw-bold" style="text-shadow: 2px 2px 4px #000;margin-top: 30px; letter-spacing: 1px;">Inscrição para Campeonato Amador de LOL</h1>
       </header>
 
       ${
@@ -331,6 +327,7 @@
             <select name="elo" class="form-control">
               <option>Ferro</option><option>Bronze</option><option>Prata</option>
               <option>Ouro</option><option>Platina</option><option>Esmeralda</option><option>Diamante</option>
+              <option>Mestre</option><option>Grão-Mestre</option><option>Desafiante</option>
             </select>
           </div>
 
