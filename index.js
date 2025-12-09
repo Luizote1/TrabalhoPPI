@@ -93,7 +93,7 @@ function layout(req, titulo, conteudo) {
   <body>
 
     <header>
-       <img src="imagens/logoLOL.png" height="140">
+       <img src="/imagens/logoLOL.png" height="140">
     </header>
 
     ${
