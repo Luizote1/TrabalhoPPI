@@ -9,6 +9,11 @@
       "nome": "Claudio o ceyfador",
       "capitao": "Luquinha",
       "contato": "18381983983"
+    },
+    {
+      "nome": "Peter",
+      "capitao": "Petico",
+      "contato": "4412222222"
     }
   ],
   "jogadores": [
@@ -19,6 +24,46 @@
       "elo": "Diamante",
       "genero": "Masculino",
       "equipe": "Claudio o ceyfador"
+    },
+    {
+      "nome": "fefawww",
+      "nick": "fawwwwwww",
+      "funcao": "top",
+      "elo": "Ferro",
+      "genero": "Masculino",
+      "equipe": "Luiz Gustavo Sá da Silva"
+    },
+    {
+      "nome": "fawfwa",
+      "nick": "fawwf",
+      "funcao": "top",
+      "elo": "Ferro",
+      "genero": "Masculino",
+      "equipe": "Luiz Gustavo Sá da Silva"
+    },
+    {
+      "nome": "afwfwafaw",
+      "nick": "wfaawfaw",
+      "funcao": "top",
+      "elo": "Ferro",
+      "genero": "Masculino",
+      "equipe": "Luiz Gustavo Sá da Silva"
+    },
+    {
+      "nome": "fwafawafwf",
+      "nick": "fwaafwfwa",
+      "funcao": "top",
+      "elo": "Ferro",
+      "genero": "Masculino",
+      "equipe": "Luiz Gustavo Sá da Silva"
+    },
+    {
+      "nome": "waffwawffaw",
+      "nick": "wfafwaawf",
+      "funcao": "top",
+      "elo": "Ferro",
+      "genero": "Masculino",
+      "equipe": "Luiz Gustavo Sá da Silva"
     }
   ]
 }

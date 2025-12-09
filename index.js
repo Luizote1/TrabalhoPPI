@@ -404,4 +404,3 @@ app.post("/jogador/cadastrar", verificarLogin, (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
 });
-  
