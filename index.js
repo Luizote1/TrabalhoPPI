@@ -4,18 +4,13 @@
   import cookieParser from "cookie-parser";
   import fs from "fs";
   import path from "path";
-  import { fileURLToPath } from "url";
-  import { dirname } from "path";
 
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = dirname(__filename);
-  
   const app = express();
   const port = 3500;
 
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
-  app.use(express.static(__dirname));
+  app.use(express.static("public"));
 
   app.use(
     session({
@@ -97,7 +92,7 @@
     <body>
 
       <header>
-        <img src="/logoLOL.png" height="140">
+        <img src="/imagens/logoLOL.png" height="140">
       </header>
 
       ${
