@@ -12,10 +12,6 @@
       "dest": "/imagens/$1"
     },
     {
-      "src": "/(.*\\.(css|js|ico|jpg|png|svg))$",
-      "dest": "/public/$1"
-    },
-    {
       "src": "/(.*)",
       "dest": "index.js"
     }
