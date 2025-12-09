@@ -92,7 +92,7 @@
     <body>
 
       <header>
-        <img src="/imagens/logoLOL.png">
+        <img src="/imagens/logoLOL.png" height="140">
       </header>
 
       ${
