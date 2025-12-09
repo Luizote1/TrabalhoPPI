@@ -10,7 +10,6 @@
 
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
-  app.use(express.static("public"));
 
   app.use(
     session({
@@ -92,7 +91,7 @@
     <body>
 
       <header>
-        <img src="/imagens/logoLOL.png" height="140">
+        <img src="../imagens/logoLOL.png" height="140">
       </header>
 
       ${
@@ -331,7 +330,7 @@
             <label class="form-label">Elo</label>
             <select name="elo" class="form-control">
               <option>Ferro</option><option>Bronze</option><option>Prata</option>
-              <option>Ouro</option><option>Platina</option><option>Diamante</option>
+              <option>Ouro</option><option>Platina</option><option>Esmeralda</option><option>Diamante</option>
             </select>
           </div>
 

@@ -64,6 +64,14 @@
       "elo": "Ferro",
       "genero": "Masculino",
       "equipe": "Luiz Gustavo Sá da Silva"
+    },
+    {
+      "nome": "Marquin",
+      "nick": "Marquin Godoy",
+      "funcao": "top",
+      "elo": "Bronze",
+      "genero": "Outro",
+      "equipe": "Claudio o ceyfador"
     }
   ]
 }
