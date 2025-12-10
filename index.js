@@ -112,9 +112,8 @@ function layout(req, titulo, conteudo) {
         </h1>
       </header>
 
-      ${
-        logado
-          ? `
+      ${logado
+      ? `
       <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container-fluid">
           <ul class="navbar-nav">
@@ -128,8 +127,8 @@ function layout(req, titulo, conteudo) {
         </div>
       </nav>
       `
-          : ""
-      }
+      : ""
+    }
 
       <div class="container">
         ${conteudo}
@@ -151,59 +150,35 @@ app.get("/login", (req, res) => {
       req,
       "Login",
       `
-      <div class="d-flex justify-content-center align-items-center" 
-           style="min-height: 100vh; padding-top:40px;">
+      <style>
+        /* impede scroll apenas nesta página */
+        html, body {
+          overflow: hidden;
+          height: 100%;
+        }
+        h2{
+          margin-top: 200px;
+        }
+      </style>
+        <h2 class="text-center">Login</h2>
+        <form method="POST" class="mt-3 col-md-6 offset-md-3">
 
-        <div style="
-          width: 95%;
-          max-width: 520px; 
-          background-color:#151515;
-          border:1px solid #c9a86a;
-          border-radius:18px;
-          padding:40px 35px;
-          box-shadow: 0 0 25px rgba(0,0,0,0.8);
-          transform: scale(1.1);
-        ">
+          <div class="mb-3">
+            <label class="form-label">Usuário</label>
+            <input name="user" class="form-control">
+          </div>
 
-          <h2 class="text-center mb-4" style="color:#c9a86a; font-size:28px; font-weight:bold;">
-            Conecte-se
-          </h2>
+          <div class="mb-3">
+            <label class="form-label">Senha</label>
+            <input type="password" name="pass" class="form-control">
+          </div>
 
-          <form method="POST">
-
-            <div class="mb-3">
-              <label class="form-label" style="color:white; font-size:16px;">Usuário</label>
-              <input name="user" class="form-control form-control-lg" 
-                     style="background:#eee; color:black; height:48px;">
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label" style="color:white; font-size:16px;">Senha</label>
-              <input type="password" name="pass" class="form-control form-control-lg" 
-                     style="background:#eee; color:black; height:48px;">
-            </div>
-
-            <button class="btn w-100" 
-              style="
-                background-color:#c9a86a; 
-                font-weight:bold; 
-                border:none;
-                height:48px;
-                font-size:18px;
-                border-radius:10px;
-              ">
-              Entrar
-            </button>
-          </form>
-
-        </div>
-
-      </div>
-      `
+          <button class="btn w-100">Entrar</button>
+        </form>
+        `
     )
   );
 });
-
 
 app.post("/login", (req, res) => {
   const { user, pass } = req.body;
