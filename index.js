@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 
 const app = express();
+const host = "0.0.0.0";
 const port = 3500;
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -420,6 +421,6 @@ app.post("/jogador/cadastrar", verificarLogin, (req, res) => {
 });
 
 /* ------------------- SERVIDOR -------------------- */
-app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
+app.listen(port, host, () => {
+  console.log(`Servidor rodando em http://${host}:${port}`);
 });
