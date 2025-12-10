@@ -9,9 +9,6 @@ const app = express();
 const host = "0.0.0.0";
 const port = 3500;
 
-/* ---------- PERMITIR ARQUIVOS ESTÁTICOS (IMAGENS, CSS, JS) ---------- */
-app.use(express.static("public"));
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -47,7 +44,7 @@ function salvar() {
   fs.writeFileSync(FILE, JSON.stringify({ equipes, jogadores }, null, 2));
 }
 
-/* ---------- DATA BRASILEIRA ---------- */
+/* ---------- GERAR DATA BRASILEIRA DD/MM/YYYY HH:MM:SS ---------- */
 function dataBrasileira() {
   const agora = new Date();
 
@@ -63,15 +60,17 @@ function dataBrasileira() {
   }).format(agora);
 }
 
-/* ---------- MIDDLEWARE ---------- */
+/* ---------- MIDDLEWARE PARA PROTEGER ROTAS ---------- */
 function verificarLogin(req, res, next) {
-  if (!req.session.user) return res.redirect("/login");
+  if (!req.session.user) {
+    return res.redirect("/login");
+  }
   next();
 }
 
-/* ---------- LAYOUT ---------- */
+/* -------------------- LAYOUT ---------------------- */
 function layout(req, titulo, conteudo) {
-  const logado = !!req.session.user;
+  const logado = req.session.user ? true : false;
 
   return `
     <!DOCTYPE html>
@@ -107,15 +106,9 @@ function layout(req, titulo, conteudo) {
 
     <body>
 
-      <header class="text-center mt-4">
-
-        <img src="/imagens/logoLOL.png"
-             alt="Campeonato LOL"
-             class="img-fluid"
-             style="max-width: 380px;margin-bottom: 15px;">
-
-        <h1 class="fw-bold"
-            style="text-shadow: 2px 2px 4px #000; letter-spacing: 1px;">
+      <header>
+        <h1 class="text-center fw-bold" 
+            style="text-shadow: 2px 2px 4px #000; margin-top: 30px; letter-spacing: 1px;">
             Inscrição para Campeonato Amador de LOL
         </h1>
       </header>
@@ -131,6 +124,7 @@ function layout(req, titulo, conteudo) {
             <li class="nav-item"><a class="nav-link" href="/jogador">Cadastrar jogador</a></li>
             <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
           </ul>
+
           <span class="text-white">Logado como: ${req.session.user}</span>
         </div>
       </nav>
@@ -146,9 +140,12 @@ function layout(req, titulo, conteudo) {
     </html>`;
 }
 
-/* ---------------- LOGIN ---------------- */
-app.get("/", (req, res) => res.redirect("/login"));
+/* ---------------- LOGIN É A PÁGINA INICIAL ---------------- */
+app.get("/", (req, res) => {
+  res.redirect("/login");
+});
 
+/* ---------------- LOGIN ---------------- */
 app.get("/login", (req, res) => {
   res.send(
     layout(
@@ -170,7 +167,7 @@ app.get("/login", (req, res) => {
 
           <button class="btn w-100">Entrar</button>
         </form>
-      `
+        `
     )
   );
 });
@@ -188,7 +185,7 @@ app.post("/login", (req, res) => {
       req,
       "Erro",
       `<div class="alert alert-danger">Usuário ou senha inválidos.</div>
-       <a class="btn" href="/login">Tentar novamente</a>`
+        <a class="btn" href="/login">Tentar novamente</a>`
     )
   );
 });
@@ -207,6 +204,7 @@ app.get("/home", verificarLogin, (req, res) => {
     ? `<p>Último acesso: ${req.cookies.lastAccess}</p>`
     : "<p>Primeiro acesso!</p>";
 
+  // Salva a data e hora no formato brasileiro no cookie
   res.cookie("lastAccess", dataBrasileira());
 
   res.send(
@@ -216,7 +214,7 @@ app.get("/home", verificarLogin, (req, res) => {
       `
         <h1>Campeonato Amador de League of Legends</h1>
         ${last}
-      `
+        `
     )
   );
 });
@@ -272,7 +270,7 @@ app.get("/equipe", verificarLogin, (req, res) => {
           </thead>
           <tbody>${tabela}</tbody>
         </table>
-      `
+        `
     )
   );
 });
@@ -286,7 +284,7 @@ app.post("/equipe/cadastrar", verificarLogin, (req, res) => {
         req,
         "Erro",
         `<div class="alert alert-danger">Preencha todos os campos.</div>
-         <a href="/equipe" class="btn">Voltar</a>`
+          <a href="/equipe" class="btn">Voltar</a>`
       )
     );
   }
@@ -299,7 +297,7 @@ app.post("/equipe/cadastrar", verificarLogin, (req, res) => {
       req,
       "Sucesso",
       `<div class="alert alert-success">Equipe cadastrada com sucesso!</div>
-       <a href="/equipe" class="btn">Voltar</a>`
+        <a href="/equipe" class="btn">Voltar</a>`
     )
   );
 });
@@ -343,36 +341,24 @@ app.get("/jogador", verificarLogin, (req, res) => {
           <div class="col-md-4">
             <label class="form-label">Função</label>
             <select name="funcao" class="form-control">
-              <option>top</option>
-              <option>jungle</option>
-              <option>mid</option>
-              <option>atirador</option>
-              <option>suporte</option>
+              <option>top</option><option>jungle</option><option>mid</option>
+              <option>atirador</option><option>suporte</option>
             </select>
           </div>
 
           <div class="col-md-4">
             <label class="form-label">Elo</label>
             <select name="elo" class="form-control">
-              <option>Ferro</option>
-              <option>Bronze</option>
-              <option>Prata</option>
-              <option>Ouro</option>
-              <option>Platina</option>
-              <option>Esmeralda</option>
-              <option>Diamante</option>
-              <option>Mestre</option>
-              <option>Grão-Mestre</option>
-              <option>Desafiante</option>
+              <option>Ferro</option><option>Bronze</option><option>Prata</option>
+              <option>Ouro</option><option>Platina</option><option>Esmeralda</option><option>Diamante</option>
+              <option>Mestre</option><option>Grão-Mestre</option><option>Desafiante</option>
             </select>
           </div>
 
           <div class="col-md-4">
             <label class="form-label">Gênero</label>
             <select name="genero" class="form-control">
-              <option>Masculino</option>
-              <option>Feminino</option>
-              <option>Outro</option>
+              <option>Masculino</option><option>Feminino</option><option>Outro</option>
             </select>
           </div>
 
@@ -390,7 +376,7 @@ app.get("/jogador", verificarLogin, (req, res) => {
 
         <h3 class="mt-4">Jogadores cadastrados</h3>
         ${tabela}
-      `
+        `
     )
   );
 });
@@ -404,7 +390,7 @@ app.post("/jogador/cadastrar", verificarLogin, (req, res) => {
         req,
         "Erro",
         `<div class="alert alert-danger">Preencha todos os campos.</div>
-         <a href="/jogador" class="btn">Voltar</a>`
+          <a href="/jogador" class="btn">Voltar</a>`
       )
     );
   }
@@ -416,7 +402,7 @@ app.post("/jogador/cadastrar", verificarLogin, (req, res) => {
         req,
         "Erro",
         `<div class="alert alert-danger">A equipe já possui 5 jogadores.</div>
-         <a href="/jogador" class="btn">Voltar</a>`
+          <a href="/jogador" class="btn">Voltar</a>`
       )
     );
   }
@@ -429,7 +415,7 @@ app.post("/jogador/cadastrar", verificarLogin, (req, res) => {
       req,
       "Sucesso",
       `<div class="alert alert-success">Jogador cadastrado!</div>
-       <a href="/jogador" class="btn">Voltar</a>`
+        <a href="/jogador" class="btn">Voltar</a>`
     )
   );
 });
