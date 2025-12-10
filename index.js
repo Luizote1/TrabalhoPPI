@@ -112,8 +112,9 @@ function layout(req, titulo, conteudo) {
         </h1>
       </header>
 
-      ${logado
-      ? `
+      ${
+        logado
+          ? `
       <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container-fluid">
           <ul class="navbar-nav">
@@ -127,8 +128,8 @@ function layout(req, titulo, conteudo) {
         </div>
       </nav>
       `
-      : ""
-    }
+          : ""
+      }
 
       <div class="container">
         ${conteudo}
@@ -150,16 +151,6 @@ app.get("/login", (req, res) => {
       req,
       "Login",
       `
-      <style>
-        /* impede scroll apenas nesta página */
-        html, body {
-          overflow: hidden;
-          height: 100%;
-        }
-        h2{
-          margin-top: 200px;
-        }
-      </style>
         <h2 class="text-center">Login</h2>
         <form method="POST" class="mt-3 col-md-6 offset-md-3">
 
