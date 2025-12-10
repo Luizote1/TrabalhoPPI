@@ -151,22 +151,39 @@ app.get("/login", (req, res) => {
       req,
       "Login",
       `
-        <h2 class="text-center">Login</h2>
-        <form method="POST" class="mt-3 col-md-6 offset-md-3">
+      <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="col-12 col-sm-10 col-md-6 col-lg-4">
 
-          <div class="mb-3">
-            <label class="form-label">Usuário</label>
-            <input name="user" class="form-control">
+          <div class="card p-4 shadow-lg" 
+               style="background-color:#151515; border:1px solid #c9a86a; border-radius:12px;">
+            
+            <h2 class="text-center mb-4" style="color:#c9a86a; font-weight:bold;">
+              Login
+            </h2>
+
+            <form method="POST">
+
+              <div class="mb-3">
+                <label class="form-label" style="color:white;">Usuário</label>
+                <input name="user" class="form-control" style="background:#eee; color:black;">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" style="color:white;">Senha</label>
+                <input type="password" name="pass" class="form-control" style="background:#eee; color:black;">
+              </div>
+
+              <button class="btn w-100" 
+                style="background-color:#c9a86a; font-weight:bold; border:none;">
+                Entrar
+              </button>
+            </form>
+
           </div>
 
-          <div class="mb-3">
-            <label class="form-label">Senha</label>
-            <input type="password" name="pass" class="form-control">
-          </div>
-
-          <button class="btn w-100">Entrar</button>
-        </form>
-        `
+        </div>
+      </div>
+      `
     )
   );
 });
