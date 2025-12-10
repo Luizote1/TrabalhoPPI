@@ -151,42 +151,59 @@ app.get("/login", (req, res) => {
       req,
       "Login",
       `
-      <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+      <div class="d-flex justify-content-center align-items-center" 
+           style="min-height: 100vh; padding-top:40px;">
 
-          <div class="card p-4 shadow-lg" 
-               style="background-color:#151515; border:1px solid #c9a86a; border-radius:12px;">
-            
-            <h2 class="text-center mb-4" style="color:#c9a86a; font-weight:bold;">
-              Login
-            </h2>
+        <div style="
+          width: 95%;
+          max-width: 520px; 
+          background-color:#151515;
+          border:1px solid #c9a86a;
+          border-radius:18px;
+          padding:40px 35px;
+          box-shadow: 0 0 25px rgba(0,0,0,0.8);
+          transform: scale(1.1);
+        ">
 
-            <form method="POST">
+          <h2 class="text-center mb-4" style="color:#c9a86a; font-size:28px; font-weight:bold;">
+            Conecte-se
+          </h2>
 
-              <div class="mb-3">
-                <label class="form-label" style="color:white;">Usuário</label>
-                <input name="user" class="form-control" style="background:#eee; color:black;">
-              </div>
+          <form method="POST">
 
-              <div class="mb-3">
-                <label class="form-label" style="color:white;">Senha</label>
-                <input type="password" name="pass" class="form-control" style="background:#eee; color:black;">
-              </div>
+            <div class="mb-3">
+              <label class="form-label" style="color:white; font-size:16px;">Usuário</label>
+              <input name="user" class="form-control form-control-lg" 
+                     style="background:#eee; color:black; height:48px;">
+            </div>
 
-              <button class="btn w-100" 
-                style="background-color:#c9a86a; font-weight:bold; border:none;">
-                Entrar
-              </button>
-            </form>
+            <div class="mb-3">
+              <label class="form-label" style="color:white; font-size:16px;">Senha</label>
+              <input type="password" name="pass" class="form-control form-control-lg" 
+                     style="background:#eee; color:black; height:48px;">
+            </div>
 
-          </div>
+            <button class="btn w-100" 
+              style="
+                background-color:#c9a86a; 
+                font-weight:bold; 
+                border:none;
+                height:48px;
+                font-size:18px;
+                border-radius:10px;
+              ">
+              Entrar
+            </button>
+          </form>
 
         </div>
+
       </div>
       `
     )
   );
 });
+
 
 app.post("/login", (req, res) => {
   const { user, pass } = req.body;
